@@ -43,6 +43,17 @@ bool expression::test_on_operator(char input) {
 }
 
 
+void expression::test_on_try_sign(char* symbol) {
+	if ((test_on_operator(*symbol))) {
+		if ((!test_on_symbol(symbol + 1))) {
+			if ((*(symbol + 1) != '(')) {
+				if ((*(symbol + 1) != '|')) {
+					throw std::logic_error("error in sign");
+				}
+			}
+		}
+	}
+}
 
 bool test_on_letter(char *input) {
 	if (((*input) >= 'a' && (*input) <= 'z')
@@ -80,7 +91,6 @@ void expression::push_name_in_struct(char* name_, double data_) {
 		var = new variables;
 		int len = strlen(name_);
 		var->name_data = new char[len + 1];
-
 		strcpy(var->name_data, name_);
 		var->data = data_;
 		var->next = NULL;
@@ -210,10 +220,9 @@ expression::expression(char* input) {
 			OperatorStk.pop();
 		}
 		else {
-			if ((OperatorStk.see()
-				&& (prior_of_operator(*symbol) < prior_of_operator(*OperatorStk.top())))) {
-				while (OperatorStk.see()
-					&& (prior_of_operator(*symbol) < prior_of_operator(*OperatorStk.top()))) {
+			if ((OperatorStk.see() && (prior_of_operator(*symbol) < prior_of_operator(*OperatorStk.top())))) {
+				while (OperatorStk.see() && (prior_of_operator(*symbol) < prior_of_operator(*OperatorStk.top()))) {
+					test_on_try_sign(symbol);
 					buffer = OperatorStk.top();
 					if (prior_of_operator(*symbol) <= prior_of_operator(*buffer)) {
 						char *ch = new char[2];
@@ -234,18 +243,20 @@ expression::expression(char* input) {
 					}
 				}
 			}
+
 			char *ch = new char[2];
 			*ch = *symbol;
 			ch[1] = '\0';
 			if (ch[0] != ' ' && pos <= len_input && prior_of_operator(ch[0]) == -1) {
 				throw std::logic_error("error in polish");
 			}
+			test_on_try_sign(symbol);
 			OperatorStk.push(ch);
 			delete[] ch;
 		}
-	} while ((*symbol != '\0')
-		&& (pos <= len_input)
-		&& (*symbol != ' ')); // translate in polish ended
+	} while ((*symbol != '\0') && (pos <= len_input) && (*symbol != ' ')); // translate in polish ended
+
+
 
 	if (CountBrackets != 0) {
 		throw std::logic_error("error in counting brackets");
@@ -365,4 +376,17 @@ double expression::counting() {
 	if (st.size_of_stack() == 1)
 		return st.view_top();
 	else throw std::logic_error("Input error, stack isn't empty");
+}
+
+expression:: ~expression() {
+	if (var != 0) {
+		while (var->next != 0) {
+			variables *buf = var;
+			var = var->next;
+			delete[] buf->name_data;
+			delete buf;
+		}
+		delete[] var->name_data;
+		delete var;
+	}
 }

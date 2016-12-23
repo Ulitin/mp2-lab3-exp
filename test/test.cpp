@@ -38,20 +38,19 @@ TEST(EXPression, test_on_hard_input)
 }
 
 
-TEST(EXPression, test_on_correct_inp1)
+TEST(EXPression, SIDNEV_TEST)
 {
-	EXPECT_ANY_THROW(expression input("2...2"));
+	EXPECT_ANY_THROW(expression input("--2"));
 }
 TEST(EXPression, test_on_correct_inp2)
 {
-	expression input("2+2");
-	ASSERT_TRUE(input.counting() == 4);
+	expression input("2^3^2");
+	ASSERT_TRUE(input.counting() == 512);
 }
 
 TEST(EXPression, test_on_correct_inp3)
 {
-	expression input("--");
-	EXPECT_ANY_THROW(input.counting());
+	EXPECT_ANY_THROW(expression input("--"););
 }
 TEST(EXPression, test_on_correct_inp4)
 {
