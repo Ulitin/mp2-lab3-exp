@@ -16,7 +16,7 @@ public:
 
 	expression();
 	expression(char* input);
-	double counting();									// output result
+	double count();									// output result
 	~expression();
 
 private:
@@ -29,6 +29,8 @@ private:
 	bool test_on_equal_varnames(char *str);
 	bool test_on_unar_minus(char* input, int pointer, bool abs_flag);
 	void test_on_try_sign(char* symbol);
+	bool test_on_figure(char *input);
+	bool test_on_letter(char *input);
 
 	
 };

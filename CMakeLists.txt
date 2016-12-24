@@ -10,5 +10,5 @@ include_directories(include)
 add_subdirectory(3rdparty)
 add_subdirectory(src)
 add_subdirectory(test)
-
+add_subdirectory(programm_test)
 

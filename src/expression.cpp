@@ -55,7 +55,7 @@ void expression::test_on_try_sign(char* symbol) {
 	}
 }
 
-bool test_on_letter(char *input) {
+bool expression::test_on_letter(char *input) {
 	if (((*input) >= 'a' && (*input) <= 'z')
 		|| ((*input) >= 'A' && (*input) <= 'Z')) {
 		return true;
@@ -65,7 +65,7 @@ bool test_on_letter(char *input) {
 	}
 }
 
-bool test_on_figure(char *input) {
+bool expression::test_on_figure(char *input) {
 	if (((*input) >= '0' && (*input) <= '9')) {
 		return true;
 	}
@@ -334,7 +334,7 @@ double expression::find_el_var(char * str) {
 }
 
 
-double expression::counting() {
+double expression::count() {
 	double x;
 	_Stack<double> st;
 	while (ExpStack.see())

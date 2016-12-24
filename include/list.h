@@ -247,7 +247,6 @@ public:
 	T pop();
 	T view_top();
 	T view_bot();
-	T get_tail();
 	void del_el_fr_tail();
 };
 
@@ -264,12 +263,6 @@ template <class T> T _Stack<T>::pop()
 {
 	return memory.del_el_fr_head();
 };
-
-template <class T> T _Stack<T>::get_tail()
-{
-	return memory.get_tail();
-};
-
 
 template <class T> bool _Stack<T>::is_stack_empty()
 {
