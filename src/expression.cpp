@@ -5,7 +5,24 @@ expression::expression() {
 	var = NULL;
 }
 
+void expression:: input(char* str) {
+	expression add(str);
+	if (var != 0) {
+		while (var->next != 0) {
+			variables *buf = var;
+			var = var->next;
+			delete[] buf->name_data;
+			delete buf;
+		}
+		delete[] var->name_data;
+		delete var;
+	}
+	*this = add;
+}
 
+expression expression::operator = (expression exp) {
+	// popozzhe
+}
 
 int expression::prior_of_operator(char sign) {
 	int prior;
