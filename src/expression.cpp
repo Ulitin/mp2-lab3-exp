@@ -5,6 +5,26 @@ expression::expression() {
 	var = NULL;
 }
 
+expression:: expression(expression &exp) {
+	for (int j = 0; exp.ExpStack.see(j); j++) {
+		this->ExpStack.push(exp.ExpStack.view_bot(j));
+	}
+	var = NULL;
+	if (exp.var != 0) {
+		variables *buf, *exp_buf = exp.var;
+		while (exp_buf != 0) {
+			buf = new variables;
+			int len = strlen(exp_buf->name_data);
+			buf->name_data = new char[len + 1];
+			strcpy(buf->name_data, exp_buf->name_data);
+			buf->data = exp_buf->data;
+			buf->next = var;
+			var = buf;
+			exp_buf = exp_buf->next;
+		}
+	}
+}
+
 void expression:: input(char* str) {
 	expression add(str);
 	if (var != 0) {
@@ -16,12 +36,47 @@ void expression:: input(char* str) {
 		}
 		delete[] var->name_data;
 		delete var;
+		var = NULL;
 	}
 	*this = add;
 }
 
-expression expression::operator = (expression exp) {
-	// popozzhe
+expression expression::operator = (expression &exp) {
+	if (this == &exp) {
+		return *this;
+	}
+	variables *buf;
+	if (var != 0) {
+		while (var->next != 0) {
+			buf = var;
+			var = var->next;
+			delete[] buf->name_data;
+			delete buf;
+			buf = NULL;
+		}
+		delete[] var->name_data;
+		delete var;
+		var = NULL;
+	}
+	buf = NULL;
+	var = NULL;
+	if (exp.var != 0) {
+		variables *exp_buf = exp.var;
+		while (exp_buf != 0) {
+			buf = new variables;
+			int len = strlen(exp_buf->name_data);
+			buf->name_data = new char[len + 1];
+			strcpy(buf->name_data, exp_buf->name_data);
+			buf->data = exp_buf->data;
+			buf->next = var;
+			var = buf;
+			exp_buf = exp_buf->next;
+		}
+	}
+	for (int j = 0; exp.ExpStack.see(j); j++) {
+		this->ExpStack.push(exp.ExpStack.view_bot(j));
+	}
+	return *this;
 }
 
 int expression::prior_of_operator(char sign) {
@@ -402,8 +457,10 @@ expression:: ~expression() {
 			var = var->next;
 			delete[] buf->name_data;
 			delete buf;
+			buf = NULL;
 		}
 		delete[] var->name_data;
 		delete var;
+		var = NULL;
 	}
 }

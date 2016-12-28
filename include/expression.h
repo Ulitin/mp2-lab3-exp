@@ -18,6 +18,8 @@ public:
 	expression(char* input);
 	double count();									// output result
 	void input(char* str);
+	expression (expression &exp);
+	expression operator = (expression &exp);
 	~expression();
 
 private:
@@ -32,6 +34,6 @@ private:
 	void test_on_try_sign(char* symbol);
 	bool test_on_figure(char *input);
 	bool test_on_letter(char *input);
-	expression expression::operator = (expression exp);
+	
 	
 };

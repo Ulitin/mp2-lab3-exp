@@ -11,7 +11,8 @@ int main(int ac, char* av[])
 	for (int i = 100; str[i] == ' '; i--) {
 		str[i] = NULL;
 	}
-	expression input;
-	input.input(str);
-	printf("answer = %lf", input.count());
+	expression input("5+a a=5");
+	expression input_2;
+	input_2 = input;
+	printf("answer = %lf", input_2.count());
 }

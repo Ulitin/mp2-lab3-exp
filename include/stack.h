@@ -19,6 +19,24 @@ public:
 		Size = 0;
 	}
 
+	queue(queue &qu) {
+		for (int i = 0; i < qu.Size; i++) {
+			this->push(qu.view_bot(i));
+		}
+	}
+
+	queue operator = (queue &qu) {
+		if (this == &qu) {
+			return *this;
+		}
+		while (this->see()) {
+			this->pop_down();
+		}
+		for (int i = 0; i < qu.Size; i++) {
+			this->push(qu.view_bot(i));
+		}
+	}
+
 	bool push(char *x) 
 	{
 		CNode *node = new CNode;
@@ -40,10 +58,17 @@ public:
 		return true;
 	}
 
-	char* view_bot() 
+	char* view_bot(const int i = 0) 
 	{
 		CNode *first = element;
-		while (first->next != NULL) { first = first->next; }
+		CNode *w_first = element;
+		for (int j = i; j != 0; j--) {
+			w_first = w_first->next;
+		}
+		while (w_first->next != NULL) {
+			first = first->next;
+			w_first = w_first->next;
+		}
 		if (first == NULL) { throw std::logic_error("stack is empty"); }
 		else { return first->data; }
 	}
@@ -60,25 +85,25 @@ public:
 		}
 		if (second != NULL)
 		{
+			Size--;
 			second->next = NULL;
 			delete[] first->data;
 			delete first;
-			Size--;
 			return true;
 		}
 		else 
 		{
-				delete[] first->data;
-				delete first;
-				first = NULL;
-				Size--;
-				return true;
+			Size--;
+			delete[] first->data;
+			delete first;
+			first = NULL;
+			return true;
 		}
 		return false;
 	}
 
-	bool see() {
-		if (Size != 0) {
+	bool see(const int i = 0 ) { //подсчет с нуля
+		if ((Size-i) > 0) {
 			return true;
 		}
 		return false;
@@ -86,7 +111,6 @@ public:
 
 
 	~queue() {
-		CNode *box;
 		while (this->see()) {
 			this->pop_down();
 		}
@@ -157,7 +181,6 @@ public:
 
 
 	~stack() {
-		CNode *box;
 		if (element != 0) {
 			while (this->see()) {
 				this->pop();
