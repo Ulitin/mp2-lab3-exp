@@ -20,6 +20,7 @@ public:
 	void input(char* str);
 	expression (expression &exp);
 	expression operator = (expression &exp);
+	bool overwrite(char *name_, double data_);
 	~expression();
 
 private:

@@ -79,6 +79,23 @@ expression expression::operator = (expression &exp) {
 	return *this;
 }
 
+bool expression::overwrite(char *name_, double data_) {
+	variables *tmp = var;
+	while (tmp)
+	{
+		if (strcmp(name_, tmp->name_data) == 0) {
+			int len = strlen(name_);
+			delete[] tmp->name_data;
+			tmp->name_data = new char[len + 1];
+			strcpy(tmp->name_data, name_);
+			tmp->data = data_;
+			return true;
+		}
+		tmp = tmp->next;
+	}
+	return false;
+}
+
 int expression::prior_of_operator(char sign) {
 	int prior;
 	switch (sign)
